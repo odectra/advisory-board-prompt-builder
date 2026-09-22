@@ -1,0 +1,35 @@
+<!--
+  Ready-to-paste card for olindvall.se/projects (src/pages/projects.astro).
+
+  This mirrors the <li class="project-card"> markup and class names used by
+  the other cards on that page — paste this <li> into the `projects` array's
+  rendered list, or copy the shape into a new entry in the `projects` array
+  if you'd rather keep it data-driven like the rest of that file:
+
+    {
+      name: 'Advisory Board Prompt Builder',
+      category: 'AI / Learning',
+      description: 'Describe what you want to learn, answer a few quick questions, and receive a personalised expert panel prompt — ready to paste into your AI model of choice. Your own advisory board, assembled in seconds.',
+      href: 'https://olindvall.se/advisory-board-prompt-builder/',   // PLACEHOLDER — see README "Deploying"
+      image: 'https://olindvall.se/advisory-board-prompt-builder/assets/preview.svg', // PLACEHOLDER — see README "Adding the project card"
+      imageAlt: 'Four abstract expert panel cards arranged in a row, connected by a dashed line',
+    },
+
+  Raw <li> version, if you'd rather paste markup directly:
+-->
+<li class="project-card" data-category="AI / Learning">
+  <img
+    class="project-image"
+    src="https://olindvall.se/advisory-board-prompt-builder/assets/preview.svg"
+    alt="Four abstract expert panel cards arranged in a row, connected by a dashed line"
+    loading="lazy"
+  />
+  <span class="category">AI / Learning</span>
+  <h2>Advisory Board Prompt Builder</h2>
+  <p>
+    Describe what you want to learn, answer a few quick questions, and receive a personalised
+    expert panel prompt — ready to paste into your AI model of choice. Your own advisory board,
+    assembled in seconds.
+  </p>
+  <a class="status status-live" href="https://olindvall.se/advisory-board-prompt-builder/" target="_blank" rel="noopener noreferrer">Try it →</a>
+</li>
