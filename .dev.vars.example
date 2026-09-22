@@ -1,0 +1,19 @@
+# Copy this file to .dev.vars and fill in real values for local development.
+# .dev.vars is gitignored — never commit it, and never put real secrets here.
+
+ANTHROPIC_API_KEY=sk-ant-REPLACE_ME
+
+# Cloudflare's published Turnstile "always passes" test secret key. Safe to
+# use as-is for local development — it pairs with the test site key
+# 1x00000000000000000000AA (used in app.js) and the dummy response token
+# XXXX.DUMMY.TOKEN.XXXX (used by scripts/quality-check.mjs). Verify current
+# test keys at https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+# before relying on this — Cloudflare occasionally adds new ones. Never use
+# a test key in production.
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Skips the Rate Limiting binding check locally, since `wrangler dev` cannot
+# provision real production rate limiters. Never set this in production —
+# the Worker fails closed (denies requests) if this is unset and the
+# binding is missing.
+ENVIRONMENT=development

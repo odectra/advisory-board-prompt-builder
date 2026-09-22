@@ -1,0 +1,38 @@
+name = "advisory-board-prompt-builder"
+main = "worker.js"
+compatibility_date = "2026-09-22"
+
+[observability]
+enabled = false
+
+[vars]
+# Comma-separated list of allowed browser origins for CORS. Replace with
+# your real deployed origin(s) before `wrangler deploy`. Keep both here
+# only if you actually serve the app from both domains.
+ALLOWED_ORIGINS = "https://olindvall.se,https://olindvall.github.io"
+
+# KV namespace for anonymous feedback (star rating + optional comment only).
+# PLACEHOLDER ID — replace after running:
+#   wrangler kv namespace create ADVISORY_FEEDBACK
+# and pasting the returned id below. See README.md for the full steps.
+[[kv_namespaces]]
+binding = "ADVISORY_FEEDBACK"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# Workers Rate Limiting bindings (GA). namespace_id is any positive integer
+# unique to this binding within your account — it does not need to be
+# created ahead of time; Cloudflare provisions it on first deploy. The
+# values below are placeholders and can be left as-is.
+[[ratelimits]]
+name = "GENERATE_RATE_LIMITER"
+namespace_id = "1001"
+[ratelimits.simple]
+limit = 2
+period = 60
+
+[[ratelimits]]
+name = "FEEDBACK_RATE_LIMITER"
+namespace_id = "1002"
+[ratelimits.simple]
+limit = 3
+period = 60

@@ -1,0 +1,13 @@
+{
+  "name": "advisory-board-prompt-builder",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "quality-check": "node scripts/quality-check.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
