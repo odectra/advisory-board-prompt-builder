@@ -1,0 +1,457 @@
+/* Advisory Board Prompt Builder
+   Design tokens mirror olindvall.se (src/layouts/Layout.astro): same
+   oklch palette, spacing, radius and shadow. Font stacks fall back to
+   system fonts instead of the site's Google-hosted Fraunces/Inter, since
+   the brief disallows third-party CSS/JS beyond Turnstile. See README.md
+   "Assumptions". */
+
+:root {
+  --font-serif: ui-serif, Georgia, 'Times New Roman', serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius: 0.5rem;
+
+  --color-bg: oklch(97.6% 0.014 78);
+  --color-text: oklch(24% 0.02 55);
+  --color-text-muted: oklch(46% 0.024 55);
+  --color-border: oklch(89% 0.015 70);
+  --color-card: oklch(99% 0.009 78);
+  --color-accent: oklch(53% 0.12 38);
+  --color-link: var(--color-text);
+  --color-danger: oklch(50% 0.16 25);
+  --shadow-card: 0 1px 2px oklch(24% 0.02 55 / 0.05), 0 4px 12px oklch(24% 0.02 55 / 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: oklch(16% 0.018 48);
+    --color-text: oklch(95.5% 0.012 75);
+    --color-text-muted: oklch(69% 0.02 60);
+    --color-border: oklch(31% 0.02 50);
+    --color-card: oklch(20.5% 0.018 50);
+    --color-accent: oklch(72% 0.13 55);
+    --color-danger: oklch(72% 0.15 25);
+    --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.2), 0 4px 12px oklch(0% 0 0 / 0.16);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 2rem 1.5rem 4rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+h1, h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.75rem;
+}
+
+a {
+  color: var(--color-link);
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Header */
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.wordmark {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text-muted);
+}
+
+.wordmark:hover {
+  color: var(--color-text);
+}
+
+.app-title {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Progress indicator */
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.progress-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 20%;
+  background: var(--color-accent);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill {
+    transition: none;
+  }
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* Steps */
+
+.step[hidden],
+.output[hidden] {
+  display: none;
+}
+
+.step {
+  animation: step-in 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step {
+    animation: none;
+  }
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.subtext {
+  color: var(--color-text-muted);
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+}
+
+label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.35rem;
+}
+
+textarea,
+input[type='text'] {
+  width: 100%;
+  font: inherit;
+  font-family: var(--font-sans);
+  padding: 0.65rem 0.8rem;
+  background: var(--color-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  resize: vertical;
+}
+
+textarea:focus,
+input[type='text']:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.char-count {
+  margin: 0.4rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.step-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+/* Buttons */
+
+.btn {
+  font: inherit;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn-generate {
+  width: 100%;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.95rem;
+}
+
+/* Option cards (goal / model selection) */
+
+.option-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.option-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  padding: 0.9rem 1rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+}
+
+.option-card:hover {
+  border-color: var(--color-accent);
+}
+
+.option-card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.option-card[aria-checked='true'] {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent), var(--shadow-card);
+}
+
+/* Turnstile + generate */
+
+#turnstile-container {
+  margin: 0.5rem 0 1.25rem;
+}
+
+.loading {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.error-message {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-danger);
+}
+
+.fine-print {
+  margin: 1.25rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* Output screen */
+
+.output {
+  margin-top: 1rem;
+}
+
+.prompt-box {
+  margin-top: 1rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  max-height: 420px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.output-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.copy-status {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+#paste-instructions {
+  margin-top: 1rem;
+}
+
+#start-over-btn {
+  margin-top: 0.5rem;
+}
+
+/* Feedback */
+
+.feedback {
+  margin-top: 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.stars {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.star {
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  color: var(--color-border);
+  cursor: pointer;
+  padding: 0.15rem;
+}
+
+.star:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.star[aria-checked='true'],
+.star.lit {
+  color: var(--color-accent);
+}
+
+.feedback label[for='feedback-comment'] {
+  margin-top: 0;
+}
+
+#feedback-comment {
+  min-height: 4.5rem;
+}
+
+.privacy-note {
+  margin: 1rem 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.feedback-status {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.feedback-status.is-error {
+  color: var(--color-danger);
+}
+
+.feedback[data-submitted='true'] .stars,
+.feedback[data-submitted='true'] label[for='feedback-comment'],
+.feedback[data-submitted='true'] #feedback-comment,
+.feedback[data-submitted='true'] .privacy-note,
+.feedback[data-submitted='true'] #feedback-submit {
+  display: none;
+}
+
+/* Footer */
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+
+@media (min-width: 480px) {
+  .option-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}

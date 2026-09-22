@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advisory Board Prompt Builder</title>
+  <meta name="description" content="Describe what you want to learn, answer a few quick questions, and get a personalised expert panel prompt to paste into your AI model of choice." />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <a class="wordmark" href="https://olindvall.se" rel="noopener">Oskar Lindvall</a>
+    <p class="app-title">Advisory Board Prompt Builder</p>
+  </header>
+
+  <main>
+    <div class="progress" id="progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-label="Step 1 of 5">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-label" id="progress-label">Step 1 of 5</span>
+    </div>
+
+    <form id="flow" novalidate>
+      <section class="step" id="step-1" data-step="1">
+        <h1>What do you want to learn about?</h1>
+        <p class="subtext">Write freely — a topic, a question, or something you've been curious about.</p>
+        <label for="topic-input">Topic</label>
+        <textarea id="topic-input" name="topic" rows="4" maxlength="1000" aria-describedby="topic-count" autofocus></textarea>
+        <p class="char-count" id="topic-count">0 / 1,000</p>
+        <div class="step-actions">
+          <button type="button" class="btn btn-primary" id="step1-continue" disabled>Continue</button>
+        </div>
+      </section>
+
+      <section class="step" id="step-2" data-step="2" hidden>
+        <h1>Tell us a little about yourself</h1>
+        <p class="subtext">Your role, background, or anything that helps the experts frame their advice for you. This is optional but makes a big difference.</p>
+        <label for="context-input">Your background</label>
+        <input type="text" id="context-input" name="context" maxlength="500" aria-describedby="context-count" />
+        <p class="char-count" id="context-count">0 / 500</p>
+        <div class="step-actions">
+          <button type="button" class="btn btn-secondary" id="step2-skip">Skip</button>
+          <button type="button" class="btn btn-primary" id="step2-continue">Continue</button>
+        </div>
+      </section>
+
+      <section class="step" id="step-3" data-step="3" hidden>
+        <h1>What do you want to do with this knowledge?</h1>
+        <p class="subtext">Choose the option that's closest to your goal.</p>
+        <div class="option-cards" id="goal-options" role="radiogroup" aria-label="Goal"></div>
+      </section>
+
+      <section class="step" id="step-4" data-step="4" hidden>
+        <h1>Which AI model will you use?</h1>
+        <p class="subtext">We'll shape the prompt's format for this model.</p>
+        <div class="option-cards" id="model-options" role="radiogroup" aria-label="AI model"></div>
+      </section>
+
+      <section class="step" id="step-5" data-step="5" hidden>
+        <h1>Build your advisory board</h1>
+        <p class="subtext">One last check, then we'll assemble your panel.</p>
+        <div id="turnstile-container"></div>
+        <button type="button" class="btn btn-primary btn-generate" id="generate-btn" disabled>Build My Advisory Board</button>
+        <p class="loading" id="loading-status" aria-live="polite" hidden>Assembling your advisory board…</p>
+        <p class="error-message" id="generate-error" role="alert" aria-live="assertive" hidden></p>
+        <p class="fine-print">Your answers are sent to Anthropic's API to generate your prompt. Bot protection by Cloudflare Turnstile.</p>
+      </section>
+    </form>
+
+    <section class="output" id="output-screen" hidden>
+      <h1>Your Advisory Board is ready</h1>
+      <div class="prompt-box" id="prompt-output" tabindex="0" aria-label="Generated prompt"></div>
+      <div class="output-actions">
+        <button type="button" class="btn btn-primary" id="copy-btn">Copy to Clipboard</button>
+        <span class="copy-status" id="copy-status" aria-live="polite"></span>
+      </div>
+      <p class="subtext" id="paste-instructions"></p>
+      <button type="button" class="btn btn-secondary" id="start-over-btn">Start Over</button>
+
+      <section class="feedback" id="feedback-section" data-submitted="false">
+        <h2>How useful was this prompt?</h2>
+        <div class="stars" id="star-selector" role="radiogroup" aria-label="Rating, 0 to 5 stars"></div>
+        <label for="feedback-comment">Any comments? (optional)</label>
+        <textarea id="feedback-comment" maxlength="500" placeholder="Please don't include personal details"></textarea>
+        <p class="char-count" id="feedback-comment-count">0 / 500</p>
+        <p class="privacy-note">We only store your star rating and comment. We don't store your topic, background, or generated prompt.</p>
+        <button type="button" class="btn btn-primary" id="feedback-submit" disabled>Submit Feedback</button>
+        <p class="feedback-status" id="feedback-status" aria-live="polite"></p>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="footer-year"></span> Oskar Lindvall. Not affiliated with Anthropic, OpenAI, Google, Microsoft or Perplexity.</p>
+  </footer>
+
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit" async defer></script>
+  <script src="app.js"></script>
+</body>
+</html>
