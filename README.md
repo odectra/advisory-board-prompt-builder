@@ -317,39 +317,40 @@ cut off in extraction:
    requiring a separate "Continue" click — the brief specifies the cards
    but not a Continue button for those two steps, and immediate advance
    fits its "conversational and calm, not form-like" requirement.
-4. **The Worker's system prompt is authored from the brief's 10 numbered
-   requirements, not copied verbatim from the brief's own "verbatim" text
-   box.** The source PDF's system-prompt callout was laid out in a
-   narrower box than the surrounding text, and every line of it was
-   clipped at the same right margin in extraction (e.g. "...respond as all
-   four ", "...argue directly with each "). The 10 numbered requirements
-   elsewhere in the brief were not clipped, so `SYSTEM_PROMPT` in
-   `worker.js` is written in full to satisfy all 10 of them; it is not a
-   verbatim transcription of unrecoverable text. Worth a read-through
-   before relying on it — see "Tuning the prompt" below.
-5. **Preview image is an original abstract SVG illustration**
+4. **Preview image is an original abstract SVG illustration**
    (`assets/preview.svg`), not a screenshot, matching the 1280×720
    dimensions of the existing PNG card previews
    (`public/images/projects/*.png` in olindvall.github.io) and reusing the
    exact accent/cream hex values from the site's existing favicon
    (`#a54f35` / `#fcf6ed`) since oklch values aren't directly usable as
    static SVG fills without a conversion.
-6. **Card CTA text and target.** The brief specifies "Try it →" for this
+5. **Card CTA text and target.** The brief specifies "Try it →" for this
    card, even though the site's own convention for *external* links is
    "Visit ↗" (internal `/projects/...` links get "Try it →"). Followed the
    brief's literal text, added `target="_blank" rel="noopener noreferrer"`
    since the deployed app is on a different origin/repo, consistent with
    how the site's other external tool cards behave.
-7. **Preview asset hosting**: rather than copying `assets/preview.svg`
+6. **Preview asset hosting**: rather than copying `assets/preview.svg`
    into olindvall.github.io (out of scope — that repo was read-only for
    this build), `project-card-snippet.html` points at the asset hosted
    from this app's own deployed origin, the same pattern already used by
    the "Financial Business Case" and "Property Investment" cards on
    `olindvall.se/projects`. See step 7 above for the alternative.
-8. Added `assets/favicon.svg` for the standalone app, styled like the main
+7. Added `assets/favicon.svg` for the standalone app, styled like the main
    site's favicon (`rx="8"` rounded square, accent fill, initials) but
    with "AB" instead of "OL" — not requested explicitly, but low-risk and
    consistent with a polished standalone deployment.
+
+**Update:** an earlier version of this list included an assumption that
+the Worker's system prompt had to be authored from the brief's 10
+numbered requirements rather than copied verbatim, because the source
+PDF's system-prompt callout was laid out in a box that clipped every line
+at the right margin in plain-text extraction. That was fixed:
+`SYSTEM_PROMPT` in `worker.js` now holds the brief's actual verbatim text,
+recovered via block-level PDF extraction (the clipped lines turned out to
+belong to a separate floating text box that simple linear text extraction
+had skipped past entirely) and confirmed against the original brief. No
+open assumption remains there.
 
 ## What I could not verify
 
